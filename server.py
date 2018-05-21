@@ -5,7 +5,7 @@ import scraper
 from flask import Flask, render_template, request, redirect, Response
 import random, json
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='jumon-app/src')
 
 @app.route("/index.html")
 def output():
@@ -13,23 +13,11 @@ def output():
 	
 @app.route('/receiver', methods = ['POST'])
 def worker():
-	toadparams = {'search_words': 'abyssmegalo', 'searchmode': 'basic'}
-	page = requests.get("https://www.trollandtoad.com/products/search.php", params=toadparams)
-	parsed = BeautifulSoup(page.content, 'html.parser')
-	prices = parsed.find_all(class_='search_result_row_wrapper')
-
-	arr = []
-	str = ""
-
-	for x in prices:
-		name = x.find(class_='search_result_text').find_all('h2')[0].get_text()
-		price = x.find(class_='price_text').get_text()
-		object = {'name': name, 'price': price}
-		str += name + " " + price + "\n"
 	
-	
+	name = request.args.get('name')
+	print(request.args.get('name'), file=sys.stderr)
+	data = scraper.scrape(name)[0]
 	str2 = ""
-	data = scraper.scrape("abyssmegalo")[0]
 	
 	for x in data:
 		str2 += x + '\n'
