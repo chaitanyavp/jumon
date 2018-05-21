@@ -65,4 +65,4 @@ def scrape(word):
 
 	# sorted_lines = price_sort(unsorted_lines)
 
-	return tuple(unsorted_lines[:20])
+	return (unsorted_lines[:20], 200)
