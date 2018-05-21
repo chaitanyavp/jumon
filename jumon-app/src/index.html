@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>JumonApp</title>
+  <base href="/">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+  <app-root></app-root>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+  <script type="text/javascript">
+  var app = angular.module('myApp', []);
+  app.controller('myCtrl', function($scope) {
+      $scope.cardname = "John Doe";
+	  // setup some JSON to use
+  //var bad = document.getElementById('textbox_id').value;
+  var cars = {};
+  cars.name = $scope.cardname;
+  window.onload = function() {
+  	// setup the button click
+  	document.getElementById("theButton").onclick = function() {
+  		doWork()
+  	};
+  }
+  function doWork() {
+  	// ajax the JSON to the server
+  	$.post("receiver" + "?name=" + $scope.cardname, $scope.cardname, function(request){
+  		document.getElementById("bad").innerHTML=request;
+  		console.log(request)
+  	});
+  	// stop link reloading the page
+   event.preventDefault();
+  }
+  });
+  </script>
+  This will send data using AJAX to Python:<br /><br />
+  <div ng-app="myApp" ng-controller="myCtrl">
+    Name: <input ng-model="cardname">
+  </div>
+  <a href="" id="theButton">Click Me</a>
+  <div id="bad">{{name}}<div>
+</body>
+</html>
