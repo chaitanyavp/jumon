@@ -65,5 +65,4 @@ for x in prices:
 
 # sorted_lines = price_sort(unsorted_lines)
 
-for line in unsorted_lines[:20]:
-	print(line)
+return unsorted_lines[:20]:
