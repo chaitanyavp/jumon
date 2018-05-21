@@ -1,8 +1,13 @@
 import requests
 from bs4 import BeautifulSoup
+import sys
 
-page = requests.get("https://www.ebay.ca/sch/i.html?_from=R40&_trksid=p2047675.m570.l1313.TR0.TRC0.H0.Xallure+of+darkness.TRS0&_nkw=allure+of+darkness&_sacat=0")
+
+toadparams = {'search_words': 'abyssmegalo', 'searchmode': 'basic'}
+page = requests.get("https://www.trollandtoad.com/products/search.php", params=toadparams)
 parsed = BeautifulSoup(page.content, 'html.parser')
-soup_str = parsed.prettify()
+prices = parsed.find_all(class_='price_text')
 
-print("ye", list(parsed.children)[0])
+for x in prices:
+    print ("ye", x.get_text())
+print("ye", prices[0].get_text())
