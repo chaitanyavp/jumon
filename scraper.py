@@ -49,20 +49,20 @@ def price_sort(lines):
 	else:
 		return []
 
+def scrape(word):
+	toadparams = {'search_words': word, 'search_category': '', 'search_order': 'price_asc'}
+	page = requests.get("https://www.trollandtoad.com/products/search.php", params=toadparams)
+	parsed = BeautifulSoup(page.content, 'html.parser')
+	prices = parsed.find_all(class_='search_result_text')
 
-toadparams = {'search_words': sys.argv[1], 'search_category': '', 'search_order': 'price_asc'}
-page = requests.get("https://www.trollandtoad.com/products/search.php", params=toadparams)
-parsed = BeautifulSoup(page.content, 'html.parser')
-prices = parsed.find_all(class_='search_result_text')
+	unsorted_lines = []
+	for x in prices:
+		text = x.get_text()
+		if text[-13:] == "SELL US YOURS":
+			unsorted_lines.append(text[:-13])
+		else:
+			unsorted_lines.append(text)
 
-unsorted_lines = []
-for x in prices:
-	text = x.get_text()
-	if text[-13:] == "SELL US YOURS":
-		unsorted_lines.append(text[:-13])
-	else:
-		unsorted_lines.append(text)
+	# sorted_lines = price_sort(unsorted_lines)
 
-# sorted_lines = price_sort(unsorted_lines)
-
-return unsorted_lines[:20]:
+	return unsorted_lines[:20]:
