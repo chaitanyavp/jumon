@@ -1,2 +1,2 @@
 # jumon
-Trading card price comparison
+Trading card price comparison by web scraping
