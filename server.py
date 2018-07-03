@@ -16,6 +16,7 @@ def worker():
 	
 	name = request.args.get('name')
 	print(request.args.get('name'), file=sys.stderr)
+	ebay_scrap = scraper.scrape_ebay(name)
 	data = scraper.scrape(name)[0]
 	str2 = ""
 	

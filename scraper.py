@@ -66,3 +66,18 @@ def scrape(word):
 	# sorted_lines = price_sort(unsorted_lines)
 
 	return (unsorted_lines[:20], 200)
+
+def scrape_ebay(word):
+	search_terms = "+".join(word.split() + ["yugioh"])
+	page = requests.get("http://www.ebay.com/sch/i.html?_nkw="+search_terms+"&_sacat=0")
+	parsed = BeautifulSoup(page.content, 'html.parser')
+	prices = parsed.find_all(class_="s-item__link")
+
+	for listing in prices:
+		if listing is not None:
+			# print("ye", BeautifulSoup)
+			# parsed_listing = BeautifulSoup(listing, "html.parser")
+			print(listing.get_text(), file=sys.stderr)
+		else:
+			print("ne")
+	return prices
