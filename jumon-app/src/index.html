@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
-<body>
+<body ng-app="myApp" ng-controller="myCtrl as vm">
   <app-root></app-root>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
@@ -18,14 +18,20 @@
 
   <script type="text/javascript">
     var app = angular.module('myApp', ["ngTable"]);
-  app.controller("myCtrl", function($scope) {
-    $scope.cardname = "John Doe";
+  app.controller("myCtrl", function(NgTableParams) {
+  var vm = this;
+  
+  vm.cardname = "bad";
+  vm.name = "good";
+    vm.doWork = doWork;
+	
+	var data = [{name: "Moroni", age: 50} /*,*/];
+	vm.tableParams = new NgTableParams({}, { dataset: data});
 
-    
     // setup some JSON to use
     //var bad = document.getElementById('textbox_id').value;
     var cars = {};
-    cars.name = $scope.cardname;
+    cars.name = vm.cardname;
     window.onload = function() {
         // setup the button click
         document.getElementById("theButton").onclick = function() {
@@ -36,7 +42,7 @@
 
     function doWork() {
       // ajax the JSON to the server
-      $.post("receiver" + "?name=" + $scope.cardname, $scope.cardname, function(request){
+      $.post("receiver" + "?name=" + vm.cardname, vm.cardname, function(request){
         document.getElementById("bad").innerHTML=request;
         console.log(request)
       });
@@ -44,17 +50,21 @@
       event.preventDefault();
     }
 
-    $scope.doWork = doWork;
+    
   });
   </script>
   This will send data using AJAX to Python:<br /><br />
-  <div ng-app="myApp" ng-controller="myCtrl">
-    Name: <input ng-model="cardname">
+  <div >
+    Name: <input ng-model="vm.cardname">
   </div>
-  <a href="" ng-click="doWork()" id="theButton">Click Me</a>
-  <div id="bad">{{name}}<div>
+  <a href="" ng-click="vm.doWork()" id="theButton">Click Me</a>
+  <div ng-bind="vm.name" id="bad"><div>
 
-
+<table ng-table="vm.tableParams" class="table" show-filter="true">
+    <tr ng-repeat="user in $data">
+        
+    </tr>
+</table>
 
 </body>
 </html>
