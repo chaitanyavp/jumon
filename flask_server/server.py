@@ -23,7 +23,7 @@ def worker():
     str2 = ""
 
     for x in data:
-        str2 += x + '\n'
+        str2 += x + '|'
 
     return str2
 

@@ -23,39 +23,79 @@ p    {color: red;}
 
   <script type="text/javascript">
     var app = angular.module('myApp', ["ngTable"]);
-  app.controller("myCtrl", function(NgTableParams) {
+  app.controller("myCtrl", function(NgTableParams, $timeout) {
   var vm = this;
-  
+
   vm.cardname = "bad";
   vm.name = "good";
+    vm.name1 = "verygood";
     vm.doWork = doWork;
-	
+
+	vm.data  = ["bad", "good", "ndad"];
+    vm.data3  = ["sdf", "asdgood", "nfdassdad"];
+
+	vm.date1 = vm.data[0];
+
 	var data = [{name: "Moroni", age: 50} /*,*/];
-	vm.tableParams = new NgTableParams({}, { dataset: data});
+    vm.tableParams = new NgTableParams({}, { dataset: data});
+
+    vm.newtableParams = new NgTableParams({}, {
+      getData: function(params) {
+        // ajax request to api
+        return $.post("receiver" + "?name=" + vm.cardname, vm.cardname, function(data){
+          //request = request.split(");
+
+          return datarequest.split("|");
+        });
+      }
+    });
 
     // setup some JSON to use
     //var bad = document.getElementById('textbox_id').value;
     var cars = {};
     cars.name = vm.cardname;
-    window.onload = function() {
+    /*window.onload = function() {
         // setup the button click
         document.getElementById("theButton").onclick = function() {
             doWork()
         };
-    };
+    };*/
 
+
+    function doWork2() {
+
+    }
 
     function doWork() {
       // ajax the JSON to the server
-      $.post("receiver" + "?name=" + vm.cardname, vm.cardname, function(request){
+
+
+
+      $.post("receiver" + "?name=" + vm.cardname, vm.cardname, function(data){
+	    //request = request.split(");
+
+        return data;
+      }).then(function(request) {
+        vm.name1 = request;
+        $timeout(function() {
+          vm.tableParams.settings({
+            dataset: request.split("|")
+          });
+        }, 500);
+
         document.getElementById("bad").innerHTML=request;
-        console.log(request)
+        console.log(request.split("|"));
+      }).then(function(request) {
+
       });
+
+
+
       // stop link reloading the page
       event.preventDefault();
     }
 
-    
+
   });
   </script>
   This will send data using AJAX to Python:<br /><br />
@@ -63,13 +103,38 @@ p    {color: red;}
     Name: <input ng-model="vm.cardname">
   </div>
   <a href="" ng-click="vm.doWork()" id="theButton">Click Me</a>
-  <div ng-bind="vm.name" id="bad"><div>
 
-<table ng-table="vm.tableParams" class="table" show-filter="true">
+
+  <div ng-bind="vm.name" id="bad"></div>
+  <div ng-bind="vm.name1" id="bad"></div>
+
+  <div ng-repeat="item in vm.data" ng-bind="item"></div>
+
+  <!--<table st-table="vm.data" class="table table-striped">-->
+
+    <!--<tr ng-repeat="row in vm.data">-->
+      <!--<td>{{row}}</td>-->
+      <!--<td>{{row}}</td>-->
+      <!--<td>{{row}}</td>-->
+      <!--<td>{{row}}</td>-->
+      <!--<td>{{row}}</td>-->
+    <!--</tr>-->
+  <!--</table>-->
+
+  <table ng-table="vm.tableParams"  >
     <tr ng-repeat="user in $data">
-        
+      <td title="'Title'" filter="{ name: 'text'}" sortable="'name'" >
+        <div ng-bind="user"></div>
+        </td>
+      <td title="'Link'" filter="{ age: 'number'}" sortable="'age'" >
+        <div ng-bind="user"></div>
+        </td>
+      <td title="'Price'" filter="{ age: 'number'}" sortable="'age'" >
+        <div ng-bind="user"></div>
+      </td>
     </tr>
-</table>
+  </table>
+
 
 </body>
 </html>
