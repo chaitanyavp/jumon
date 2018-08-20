@@ -2,10 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 import sys
 import scraper
-from flask import Flask, render_template, request, redirect, Response
-import random, json
+from flask import Flask, render_template, request, redirect, Response, json
+import random
 
-app = Flask(__name__, template_folder='jumon-app/src')
+app = Flask(__name__, template_folder='../jumon-app/src')
 
 
 @app.route("/index.html")
